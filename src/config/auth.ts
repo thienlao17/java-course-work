@@ -24,9 +24,7 @@ export const authConfig: AuthOptions = {
 
             const data = await response.json()
             console.log('Ответ от сервера:', data)
-
             console.log('Вход выполнен успешно')
-
             return data as User
           } catch (error) {
             console.error('Ошибка при входе:', error)
@@ -37,4 +35,21 @@ export const authConfig: AuthOptions = {
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user, account, profile, isNewUser }) {
+      if (user) {
+        token.id = user.id
+        token.accessToken = user.token
+      }
+
+      return token
+    },
+    async session({ session, token }) {
+      const currentSession = { ...session }
+      const currentToken = { ...token }
+      currentSession.user.id = currentToken.id
+      currentSession.accessToken = currentToken.accessToken
+      return currentSession
+    },
+  },
 }

@@ -1,6 +1,6 @@
 import HeroSection from '@/components/HeroSection'
 
-export default function Home() {
+export default function HomePage() {
   return (
     <>
       <div className="isolate bg-white">

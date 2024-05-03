@@ -13,6 +13,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from '@/components/ui/carousel'
+import useGetAllProducts from '@/entities/product/use-get-all-products'
 
 const features = [
   {
@@ -33,11 +34,9 @@ const features = [
 ]
 
 export default function HeroSection() {
-  const product = {
-    name: 'Название продукта',
-    price: '$19.99',
-    image: 'путь_к_изображению.jpg',
-  }
+  const { data, error } = useGetAllProducts()
+  const productsToShow = data?.slice(0, 3)
+
   return (
     <div>
       <h1 className="bg-transparent pb-10 pt-5 text-center text-4xl font-bold tracking-tight text-gray-900">
@@ -56,33 +55,21 @@ export default function HeroSection() {
         ]}
       >
         <CarouselContent className="flex ">
-          <CarouselItem className="py-4z flex items-center justify-center">
-            <div className="flex size-full items-center justify-center bg-transparent">
-              <Banner
-                name={product.name}
-                price={product.price}
-                image={product.image}
-              />
-            </div>
-          </CarouselItem>
-          <CarouselItem>
-            <div className="flex size-full items-center justify-center bg-transparent">
-              <Banner
-                name={product.name}
-                price={product.price}
-                image={product.image}
-              />
-            </div>
-          </CarouselItem>
-          <CarouselItem>
-            <div className="flex  size-full items-center justify-center bg-transparent">
-              <Banner
-                name={product.name}
-                price={product.price}
-                image={product.image}
-              />
-            </div>
-          </CarouselItem>
+          {productsToShow?.map((product) => (
+            <CarouselItem
+              key={product.id}
+              className="flex items-center justify-center py-4"
+            >
+              <div className="flex size-full items-center justify-center bg-transparent">
+                <Banner
+                  link={product.id}
+                  name={product.title}
+                  price={`$${product.price}`}
+                  image={product.imageUrl}
+                />
+              </div>
+            </CarouselItem>
+          ))}
         </CarouselContent>
       </Carousel>
       <div className="pt-5">
